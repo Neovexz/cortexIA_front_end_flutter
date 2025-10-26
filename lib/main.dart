@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end_flutter_cortex_ia/config/app_config.dart';
 import 'package:front_end_flutter_cortex_ia/core/constants/colors.dart';
+import 'package:front_end_flutter_cortex_ia/presentation/pages/login.dart';
 
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: AppColors.primary,
       ),
-      home: HomePage(config: config),
+      home: LoginPage(),
     );
   }
 }

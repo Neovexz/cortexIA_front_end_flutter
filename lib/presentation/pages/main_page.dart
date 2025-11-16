@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '/core/theme/app_theme.dart';
-import '../widgets/user_menu.dart';
+import '../widgets/menus/user_menu.dart';
 import 'dashboard_page.dart';
 import 'configuracoes_pages.dart';
-import 'criar_chamados_page.dart';
+import 'chamados/criar_chamados_page.dart';
 import 'chamados_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -16,10 +16,10 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     DashboardPage(),
     ChamadosPage(),
-    CriarChamadoPage(),
+    CriarChamadosPage(),
     ConfiguracoesPage(),
   ];
 

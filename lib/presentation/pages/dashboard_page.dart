@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/dashboard_controller.dart';
-import '../widgets/status_card.dart';
 import '../widgets/chamado_card.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -18,7 +17,7 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     controller.carregarChamados();
     controller.addListener(() {
-      setState(() {}); // atualiza a tela quando o controller muda
+      setState(() {}); 
     });
   }
 
@@ -35,28 +34,28 @@ class _DashboardPageState extends State<DashboardPage> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: [
-                      StatusCard(
-                        title: 'Total de Chamados',
-                        value: '${controller.totalChamados}',
-                        color: Colors.blue,
-                      ),
-                      StatusCard(
-                        title: 'Abertos',
-                        value: '${controller.abertos}',
-                        color: Colors.red,
-                      ),
-                      StatusCard(
-                        title: 'Em andamento',
-                        value: '${controller.andamento}',
-                        color: Colors.orange,
-                      ),
-                      StatusCard(
-                        title: 'Resolvidos',
-                        value: '${controller.resolvidos}',
-                        color: Colors.green,
-                      ),
-                    ],
+                    // children: [
+                    //   StatusCard(
+                    //     title: 'Total de Chamados',
+                    //     // value: '${controller.totalChamados}',
+                    //     color: Colors.blue,
+                    //   ),
+                    //   StatusCard(
+                    //     title: 'Abertos',
+                    //     // value: '${controller.abertos}',
+                    //     color: Colors.red,
+                    //   ),
+                    //   StatusCard(
+                    //     title: 'Em andamento',
+                    //     // value: '${controller.andamento}',
+                    //     color: Colors.orange,
+                    //   ),
+                    //   StatusCard(
+                    //     title: 'Resolvidos',
+                    //     // value: '${controller.resolvidos}',
+                    //     color: Colors.green,
+                    //   ),
+                    // ],
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -64,11 +63,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Column(
-                    children: controller.chamados
-                        .map((c) => ChamadoCard(chamado: c))
-                        .toList(),
-                  ),
+                  // Column(
+                  //   children: controller.chamados
+                  //       // .map((c) => ChamadoCard(chamado: c))
+                  //       // .toList(),
+                  // ),
                 ],
               ),
             ),

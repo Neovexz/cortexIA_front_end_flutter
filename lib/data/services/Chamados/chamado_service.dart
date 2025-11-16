@@ -1,6 +1,4 @@
-import 'dart:convert';
-// import 'package:http/http.dart' as http;
-import '../models/chamados/chamado_model.dart';
+import '../../models/chamados/chamado_model.dart';
 
 class ChamadoService {
   // TODO: Substituir por chamada real à AP
@@ -32,18 +30,30 @@ class ChamadoService {
 //   }
 // }
 
-//   /// Apenas deixa a requisição pronta — backend entra depois
-//   Future<bool> criarChamado(ChamadoCreateModel model) async {
-//     // Você só vai trocar o path quando o backend decidir
-//     // final url = Uri.parse(ApiConfig.chamadosEndpoint("criar"));
-
-//     // final response = await http.post(
-//     //   url,
-//     //   body: jsonEncode(model.toJson()),
-//     //   headers: {"Content-Type": "application/json"},
-//     // ).timeout(ApiConfig.timeout);
-
-//     // Quando o backend Java existir, siga o contrato:
-//     return response.statusCode == 200 || response.statusCode == 201;
-//   }
+  Future<List<ChamadoModel>> fetchChamados() async {
+    await Future.delayed(const Duration(milliseconds: 500)); // simula atraso da API
+    return [
+      ChamadoModel(
+        id: 1,
+        titulo: 'Erro na conexão com internet',
+        status: 'Aberto',
+        descricao: 'Usuário relata perda de conexão em horário comercial.',
+        criadoEm: '2025-10-28',
+      ),
+      ChamadoModel(
+        id: 2,
+        titulo: 'Excel não abre após atualização',
+        status: 'Em andamento',
+        descricao: 'Problema após instalação da última versão do Office.',
+        criadoEm: '2025-10-27',
+      ),
+      ChamadoModel(
+        id: 3,
+        titulo: 'Impressora parou de imprimir',
+        status: 'Resolvido',
+        descricao: 'Reinstalação do driver solucionou o problema.',
+        criadoEm: '2025-10-26',
+      ),
+    ];
+  }
 }

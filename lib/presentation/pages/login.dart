@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../custom_text_field.dart';
+import '../widgets/inputs/campo_formulario.dart';
 import '../controllers/login_controller.dart';
-import '../widgets/primary_button.dart';
+import '../widgets/buttons/primary_button.dart';
 import 'esqueceu_senha.dart';
 
 class LoginPage extends StatelessWidget {
@@ -44,8 +44,10 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // 🔥 Centraliza tudo verticalmente
-                crossAxisAlignment: CrossAxisAlignment.center, // 🔥 Centraliza horizontalmente
+                mainAxisAlignment: MainAxisAlignment
+                    .center, // 🔥 Centraliza tudo verticalmente
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // 🔥 Centraliza horizontalmente
                 children: [
                   Container(
                     constraints: const BoxConstraints(
@@ -60,17 +62,19 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // Campo Email
-                  CustomTextField(
+                  CampoFormulario(
                     controller: controller.emailController,
                     label: "Email",
+                    hint: "Digite um email...",
                   ),
                   const SizedBox(height: 20),
 
                   // Campo Senha
-                  CustomTextField(
+                  CampoFormulario(
                     controller: controller.passwordController,
                     label: "Senha",
                     obscureText: true,
+                    hint: "Digite o nome...",
                   ),
                   const SizedBox(height: 10),
 
@@ -101,6 +105,7 @@ class LoginPage extends StatelessWidget {
                   PrimaryButton(
                     text: "Entrar",
                     onPressed: controller.login,
+                    type: ButtonType.gradient,
                   ),
                 ],
               ),

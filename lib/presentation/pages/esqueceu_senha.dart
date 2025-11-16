@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../controllers/esqueceu_senha_controller.dart';
-import '../custom_text_field.dart';
-import '../widgets/primary_button.dart';
+import '../widgets/inputs/campo_formulario.dart';
+import '../widgets/buttons/primary_button.dart';
 
 class EsqueceuSenha extends StatefulWidget {
   const EsqueceuSenha({super.key});
@@ -69,9 +69,10 @@ class _EsqueceuSenhaState extends State<EsqueceuSenha> {
                   const SizedBox(height: 32),
 
                   // Campo de email
-                  CustomTextField(
+                  CampoFormulario(
                     controller: controller.emailController,
                     label: "Email",
+                    hint: "Digite o email...",
                   ),
                   const SizedBox(height: 24),
 
@@ -81,6 +82,7 @@ class _EsqueceuSenhaState extends State<EsqueceuSenha> {
                       : PrimaryButton(
                           text: "Enviar link de troca de senha",
                           onPressed: () => controller.enviarLink(context),
+                          type: ButtonType.gradient,
                         ),
                 ],
               ),

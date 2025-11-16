@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ChamadosPage extends StatelessWidget {
-  const ChamadosPage({super.key});
+class CriarChamadoPage extends StatelessWidget {
+  const CriarChamadoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        'Página de Chamados',
+        'Página de Criação de Chamado',
         style: TextStyle(fontSize: 18),
       ),
     );

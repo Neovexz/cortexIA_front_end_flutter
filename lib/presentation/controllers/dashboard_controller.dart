@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/data/models/chamado_model.dart';
+import '../../data/models/chamados/chamado_model.dart';
 import '/data/services/chamado_service.dart';
 
 class DashboardController extends ChangeNotifier {
@@ -12,15 +12,15 @@ class DashboardController extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    chamados = await _service.fetchChamados();
+    // chamados = await _service.fetchChamados();
 
     isLoading = false;
     notifyListeners();
   }
 
   // Estatísticas (simples por enquanto)
-  int get totalChamados => chamados.length;
-  int get abertos => chamados.where((c) => c.status == 'Aberto').length;
-  int get andamento => chamados.where((c) => c.status == 'Em andamento').length;
-  int get resolvidos => chamados.where((c) => c.status == 'Resolvido').length;
+  // int get totalChamados => chamados.length;
+  // int get abertos => chamados.where((c) => c.status == 'Aberto').length;
+  // int get andamento => chamados.where((c) => c.status == 'Em andamento').length;
+  // int get resolvidos => chamados.where((c) => c.status == 'Resolvido').length;
 }

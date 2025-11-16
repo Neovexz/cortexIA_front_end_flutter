@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/data/services/chamado_service.dart';
-import '/data/models/chamado_model.dart';
+import '../../data/models/chamados/chamado_model.dart';
 
 class ChamadosController extends ChangeNotifier {
   final ChamadoService _service = ChamadoService();

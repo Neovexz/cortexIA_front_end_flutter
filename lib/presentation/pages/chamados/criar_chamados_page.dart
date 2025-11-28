@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:front_end_flutter_cortex_ia/data/models/chamados/ChamadoModel.dart';
+import 'package:front_end_flutter_cortex_ia/presentation/controllers/ChamadoController.dart';
 import '../../widgets/buttons/primary_button.dart';
 import '../../widgets/cards/cards.dart';
 import '../../widgets/inputs/campo_formulario.dart';
@@ -13,6 +15,8 @@ class CriarChamadosPage extends StatefulWidget {
 }
 
 class _CriarChamadosPageState extends State<CriarChamadosPage> {
+  final ChamadosController controller = ChamadosController(); // ADICIONADO
+
   final TextEditingController tituloController = TextEditingController();
   final TextEditingController descricaoController = TextEditingController();
   final TextEditingController localController = TextEditingController();
@@ -48,7 +52,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
           children: [
             const CabecalhoSecao(title: 'Informações do Chamado'),
             const SizedBox(height: 20),
-
             AppCard(
               child: Column(
                 children: [
@@ -58,7 +61,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
                     hint: 'Ex: Computador não liga',
                   ),
                   const SizedBox(height: 16),
-
                   CampoSelecao(
                     label: 'Prioridade',
                     value: prioridadeSelecionada,
@@ -66,7 +68,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
                     onChanged: (v) => setState(() => prioridadeSelecionada = v),
                   ),
                   const SizedBox(height: 16),
-
                   CampoSelecao(
                     label: 'Impacto na Empresa',
                     value: impactoSelecionado,
@@ -74,7 +75,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
                     onChanged: (v) => setState(() => impactoSelecionado = v),
                   ),
                   const SizedBox(height: 16),
-
                   CampoSelecao(
                     label: 'Categoria',
                     value: categoriaSelecionada,
@@ -82,14 +82,12 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
                     onChanged: (v) => setState(() => categoriaSelecionada = v),
                   ),
                   const SizedBox(height: 16),
-
                   CampoFormulario(
                     controller: localController,
                     label: 'Local / Setor',
                     hint: 'Ex: Financeiro - Sala 3',
                   ),
                   const SizedBox(height: 16),
-
                   CampoFormulario(
                     controller: descricaoController,
                     label: 'Descrição Detalhada',
@@ -99,13 +97,41 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
                 ],
               ),
             ),
-
             const SizedBox(height: 28),
             PrimaryButton(
               text: 'Abrir Chamado',
-              onPressed: () {},
               type: ButtonType.blue,
-            )
+              onPressed: () async {
+                final model = ChamadoModel(
+                  titulo: tituloController.text,
+                  descricao: descricaoController.text,
+                  local: localController.text,
+                  prioridade: prioridadeSelecionada ?? "",
+                  impacto: impactoSelecionado ?? "",
+                  categoria: categoriaSelecionada ?? "",
+                );
+
+                final resposta = await controller.criarChamado(model);
+
+                if (resposta != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Chamado criado! ID: ${resposta.id}"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+
+                  Navigator.pop(context, 1); // VOLTA PARA ABA CHAMADOS
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Erro ao criar chamado."),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

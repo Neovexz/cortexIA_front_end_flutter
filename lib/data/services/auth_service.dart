@@ -1,13 +1,7 @@
 import 'dart:convert';
+import 'package:front_end_flutter_cortex_ia/data/models/chamados/auth_result.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-class AuthResult {
-  final bool success;
-  final String message;
-
-  AuthResult(this.success, this.message);
-}
 
 class AuthService {
   final String baseUrl = "http://localhost:8080";
@@ -22,28 +16,31 @@ class AuthService {
       url,
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
-        "username": email,
+        "email": email, // ← AQUI ARRUMADO
         "password": password,
       }),
     );
+
+    print("📨 BODY ENVIADO: ${jsonEncode({
+          "email": email,
+          "password": password
+        })}");
+    print("📩 RESPOSTA SERVIDOR: ${response.body}");
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("user_token", data["token"]);
-      await prefs.setString("user_email", email);
+      await prefs.setString("user_email", data["email"]);
+      await prefs.setString("user_role", data["role"]);
+      await prefs.setInt("user_id", data["id"]);
+      await prefs.setString("user_nome", data["nome"]);
 
-      // Buscar dados reais do usuário
-      final me = await getUserData();
-      if (me != null) {
-        await prefs.setString("user_role", me["role"]);
-      }
-
-      return AuthResult(true, "Login OK");
+      return AuthResult.fromJson(data);
     }
 
-    return AuthResult(false, "Credenciais inválidas");
+    return AuthResult.error("Credenciais inválidas");
   }
 
   /// ============================

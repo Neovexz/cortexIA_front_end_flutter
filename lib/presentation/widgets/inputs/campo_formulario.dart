@@ -6,6 +6,7 @@ class CampoFormulario extends StatelessWidget {
   final String hint;
   final int maxLines;
   final bool obscureText;
+  final TextInputType keyboardType; 
 
   const CampoFormulario({
     super.key,
@@ -14,6 +15,7 @@ class CampoFormulario extends StatelessWidget {
     required this.hint,
     this.maxLines = 1,
     this.obscureText = false,
+    this.keyboardType = TextInputType.text, 
   });
 
   @override
@@ -32,7 +34,8 @@ class CampoFormulario extends StatelessWidget {
         TextField(
           controller: controller,
           obscureText: obscureText,
-          maxLines: maxLines,
+          keyboardType: keyboardType, 
+          maxLines: obscureText ? 1 : maxLines,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(color: Color(0xFF5A5A5A)),

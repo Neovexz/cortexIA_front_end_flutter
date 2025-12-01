@@ -132,11 +132,11 @@ class _MainPageState extends State<MainPage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.workspaces_outline),
-              label: 'Chamados',
+              label: 'Meus Chamados',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.add_circle, size: 30),
-              label: 'Criar',
+              label: 'Criar Chamado',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),

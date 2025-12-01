@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '/core/theme/app_theme.dart';
-import '../../pages/login/perfil_user.dart';
+import 'package:front_end_flutter_cortex_ia/presentation/pages/login.dart';
+import 'package:front_end_flutter_cortex_ia/presentation/pages/login/perfil_user.dart';
 
 class UserMenuSheet extends StatelessWidget {
   const UserMenuSheet({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    if (context.mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => LoginPage()),
+        (route) => false,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +26,6 @@ class UserMenuSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Linha da "alça" superior
           Container(
             width: 40,
             height: 5,
@@ -22,8 +35,6 @@ class UserMenuSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-
-          // Nome e foto
           Row(
             children: [
               const CircleAvatar(
@@ -43,6 +54,7 @@ class UserMenuSheet extends StatelessWidget {
                       color: AppTheme.textPrimary,
                     ),
                   ),
+                  SizedBox(height: 2),
                   Text(
                     "email@empresa.com",
                     style: TextStyle(
@@ -54,10 +66,7 @@ class UserMenuSheet extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 25),
-
-          // Opção 1 - Ver perfil
           ListTile(
             leading: const Icon(Icons.person_outline, color: AppTheme.primary),
             title: const Text("Ver Perfil"),
@@ -65,42 +74,29 @@ class UserMenuSheet extends StatelessWidget {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const PerfilPage(),
-                ),
+                MaterialPageRoute(builder: (_) => const PerfilPage()),
               );
             },
           ),
-
-          // Opção 2 - Configurações
           ListTile(
             leading: const Icon(Icons.settings, color: AppTheme.secondary),
             title: const Text("Configurações"),
             onTap: () {
               Navigator.pop(context);
-              // navega para configurações
             },
           ),
-
-          // Divider
           const Divider(height: 30),
-
-          // Logout
           ListTile(
             leading: const Icon(Icons.logout, color: AppTheme.danger),
             title: const Text(
               "Sair da Conta",
-              style: TextStyle(color: AppTheme.danger),
+              style: TextStyle(
+                color: AppTheme.danger,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            onTap: () {
-              // Aqui você faz o logout
-              Navigator.pop(context);
-
-              // Voltar para tela de login
-              Navigator.of(context).pushReplacementNamed('/login');
-            },
+            onTap: () => _logout(context),
           ),
-
           const SizedBox(height: 10),
         ],
       ),

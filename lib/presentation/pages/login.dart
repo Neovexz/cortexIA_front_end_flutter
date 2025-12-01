@@ -1,115 +1,71 @@
 import 'package:flutter/material.dart';
-import '../widgets/inputs/campo_formulario.dart';
-import '../controllers/login_controller.dart';
-import '../widgets/buttons/primary_button.dart';
-import 'esqueceu_senha.dart';
+import 'package:front_end_flutter_cortex_ia/presentation/controllers/LoginController.dart';
+import 'package:provider/provider.dart';
+
+import '../../core/theme/app_theme.dart';
 
 class LoginPage extends StatelessWidget {
-  final LoginController controller = LoginController();
-
   LoginPage({super.key});
+
+  final LoginController controller = LoginController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFF6D00),
-              Color(0xFFD500F9),
-              Color(0xFF2979FF),
+      body: Center(
+        child: Container(
+          width: 450,
+          padding: const EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 15,
+              )
             ],
           ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Container(
-              width: 500,
-              height: 650,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 20,
-                    offset: Offset(0, 10),
-                  ),
-                ],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Bem-vindo 👋",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment
-                    .center, // 🔥 Centraliza tudo verticalmente
-                crossAxisAlignment:
-                    CrossAxisAlignment.center, // 🔥 Centraliza horizontalmente
-                children: [
-                  Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 250,
-                      maxHeight: 200,
-                    ),
-                    child: Image.asset(
-                      'assets/images/logo-cortexia-colorida.png',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Campo Email
-                  CampoFormulario(
-                    controller: controller.emailController,
-                    label: "Email",
-                    hint: "Digite um email...",
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Campo Senha
-                  CampoFormulario(
-                    controller: controller.passwordController,
-                    label: "Senha",
-                    obscureText: true,
-                    hint: "Digite o nome...",
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Esqueceu senha alinhado à direita
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EsqueceuSenha(),
-                          ),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.orange.shade700,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      child: const Text("Esqueceu senha?"),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-
-                  // Botão principal
-                  PrimaryButton(
-                    text: "Entrar",
-                    onPressed: controller.login,
-                    type: ButtonType.gradient,
-                  ),
-                ],
+              const SizedBox(height: 18),
+              TextField(
+                controller: controller.emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: controller.passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Senha",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 26),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primary,
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                onPressed: () => controller.login(context),
+                child: const Text(
+                  "Entrar",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+            ],
           ),
         ),
       ),

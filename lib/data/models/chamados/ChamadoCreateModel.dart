@@ -1,4 +1,6 @@
-class ChamadoModel {
+import 'package:front_end_flutter_cortex_ia/presentation/widgets/enum_normalizer.dart';
+
+class ChamadoCreateModel {
   final String titulo;
   final String descricao;
   final String local;
@@ -6,7 +8,7 @@ class ChamadoModel {
   final String impacto;
   final String categoria;
 
-  ChamadoModel({
+  ChamadoCreateModel({
     required this.titulo,
     required this.descricao,
     required this.local,
@@ -19,8 +21,8 @@ class ChamadoModel {
         "titulo": titulo,
         "descricao": descricao,
         "local": local,
-        "prioridade": prioridade,
-        "impacto": impacto,
-        "categoria": categoria,
+        "prioridade": normalizeEnum(prioridade),
+        "impacto": normalizeEnum(impacto),
+        "categoria": normalizeEnum(categoria),
       };
 }

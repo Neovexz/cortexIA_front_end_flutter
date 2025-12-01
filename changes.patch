@@ -1,0 +1,819 @@
+diff --git a/lib/data/models/chamados/chamado_model.dart b/lib/data/models/chamados/chamado_model.dart
+deleted file mode 100644
+index 5b96185..0000000
+--- a/lib/data/models/chamados/chamado_model.dart
++++ /dev/null
+@@ -1,26 +0,0 @@
+-class ChamadoModel {
+-  final String titulo;
+-  final String descricao;
+-  final String local;
+-  final String prioridade;
+-  final String impacto;
+-  final String categoria;
+-
+-  ChamadoModel({
+-    required this.titulo,
+-    required this.descricao,
+-    required this.local,
+-    required this.prioridade,
+-    required this.impacto,
+-    required this.categoria,
+-  });
+-
+-  Map<String, dynamic> toJson() => {
+-        "titulo": titulo,
+-        "descricao": descricao,
+-        "local": local,
+-        "prioridade": prioridade,
+-        "impacto": impacto,
+-        "categoria": categoria,
+-      };
+-}
+diff --git a/lib/data/services/Chamados/chamado_service.dart b/lib/data/services/Chamados/chamado_service.dart
+deleted file mode 100644
+index 70a1672..0000000
+--- a/lib/data/services/Chamados/chamado_service.dart
++++ /dev/null
+@@ -1,59 +0,0 @@
+-import '../../models/chamados/chamado_model.dart';
+-
+-class ChamadoService {
+-  // TODO: Substituir por chamada real à AP
+-
+-// class ChamadoService {
+-//   final String baseUrl = 'http://localhost:8080/api/chamados'; // depois muda para o IP da API
+-
+-//   Future<List<ChamadoModel>> listarChamados() async {
+-//     final response = await http.get(Uri.parse(baseUrl));
+-
+-//     if (response.statusCode == 200) {
+-//       final List<dynamic> data = json.decode(response.body);
+-//       return data.map((e) => ChamadoModel.fromJson(e)).toList();
+-//     } else {
+-//       throw Exception('Erro ao carregar chamados: ${response.statusCode}');
+-//     }
+-//   }
+-
+-//   Future<void> criarChamado(Map<String, dynamic> chamadoData) async {
+-//     final response = await http.post(
+-//       Uri.parse(baseUrl),
+-//       headers: {'Content-Type': 'application/json'},
+-//       body: json.encode(chamadoData),
+-//     );
+-
+-//     if (response.statusCode != 201) {
+-//       throw Exception('Erro ao criar chamado');
+-//     }
+-//   }
+-// }
+-
+-  Future<List<ChamadoModel>> fetchChamados() async {
+-    await Future.delayed(const Duration(milliseconds: 500)); // simula atraso da API
+-    return [
+-      ChamadoModel(
+-        id: 1,
+-        titulo: 'Erro na conexão com internet',
+-        status: 'Aberto',
+-        descricao: 'Usuário relata perda de conexão em horário comercial.',
+-        criadoEm: '2025-10-28',
+-      ),
+-      ChamadoModel(
+-        id: 2,
+-        titulo: 'Excel não abre após atualização',
+-        status: 'Em andamento',
+-        descricao: 'Problema após instalação da última versão do Office.',
+-        criadoEm: '2025-10-27',
+-      ),
+-      ChamadoModel(
+-        id: 3,
+-        titulo: 'Impressora parou de imprimir',
+-        status: 'Resolvido',
+-        descricao: 'Reinstalação do driver solucionou o problema.',
+-        criadoEm: '2025-10-26',
+-      ),
+-    ];
+-  }
+-}
+diff --git a/lib/data/services/chamado_service.dart b/lib/data/services/chamado_service.dart
+deleted file mode 100644
+index b85ad1e..0000000
+--- a/lib/data/services/chamado_service.dart
++++ /dev/null
+@@ -1,49 +0,0 @@
+-import 'dart:convert';
+-// import 'package:http/http.dart' as http;
+-import '../models/chamados/chamado_model.dart';
+-
+-class ChamadoService {
+-  // TODO: Substituir por chamada real à AP
+-
+-// class ChamadoService {
+-//   final String baseUrl = 'http://localhost:8080/api/chamados'; // depois muda para o IP da API
+-
+-//   Future<List<ChamadoModel>> listarChamados() async {
+-//     final response = await http.get(Uri.parse(baseUrl));
+-
+-//     if (response.statusCode == 200) {
+-//       final List<dynamic> data = json.decode(response.body);
+-//       return data.map((e) => ChamadoModel.fromJson(e)).toList();
+-//     } else {
+-//       throw Exception('Erro ao carregar chamados: ${response.statusCode}');
+-//     }
+-//   }
+-
+-//   Future<void> criarChamado(Map<String, dynamic> chamadoData) async {
+-//     final response = await http.post(
+-//       Uri.parse(baseUrl),
+-//       headers: {'Content-Type': 'application/json'},
+-//       body: json.encode(chamadoData),
+-//     );
+-
+-//     if (response.statusCode != 201) {
+-//       throw Exception('Erro ao criar chamado');
+-//     }
+-//   }
+-// }
+-
+-//   /// Apenas deixa a requisição pronta — backend entra depois
+-//   Future<bool> criarChamado(ChamadoCreateModel model) async {
+-//     // Você só vai trocar o path quando o backend decidir
+-//     // final url = Uri.parse(ApiConfig.chamadosEndpoint("criar"));
+-
+-//     // final response = await http.post(
+-//     //   url,
+-//     //   body: jsonEncode(model.toJson()),
+-//     //   headers: {"Content-Type": "application/json"},
+-//     // ).timeout(ApiConfig.timeout);
+-
+-//     // Quando o backend Java existir, siga o contrato:
+-//     return response.statusCode == 200 || response.statusCode == 201;
+-//   }
+-}
+diff --git a/lib/main.dart b/lib/main.dart
+index d390812..3c67e2e 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -1,7 +1,11 @@
+ import 'package:flutter/material.dart';
++import 'package:front_end_flutter_cortex_ia/presentation/controllers/ChamadoController.dart';
++import 'package:provider/provider.dart';
++
+ import '/presentation/pages/main_page.dart';
+ import '/core/theme/app_theme.dart';
+ 
++
+ void main() {
+   runApp(const MyApp());
+ }
+@@ -11,11 +15,18 @@ class MyApp extends StatelessWidget {
+ 
+   @override
+   Widget build(BuildContext context) {
+-    return MaterialApp(
+-      debugShowCheckedModeBanner: false,
+-      title: 'Sistema de Suporte Técnico',
+-      theme: AppTheme.theme,
+-      home: const MainPage(),
++    return MultiProvider(
++      providers: [
++        ChangeNotifierProvider(
++          create: (_) => ChamadosController(),
++        ),
++      ],
++      child: MaterialApp(
++        debugShowCheckedModeBanner: false,
++        title: 'Sistema de Suporte Técnico',
++        theme: AppTheme.theme,
++        home: const MainPage(),
++      ),
+     );
+   }
+ }
+diff --git a/lib/presentation/controllers/chamados_controller.dart b/lib/presentation/controllers/chamados_controller.dart
+deleted file mode 100644
+index f02a3cf..0000000
+--- a/lib/presentation/controllers/chamados_controller.dart
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import 'package:flutter/material.dart';
+-import '/data/services/chamado_service.dart';
+-import '../../data/models/chamados/chamado_model.dart';
+-
+-class ChamadosController extends ChangeNotifier {
+-  final ChamadoService _service = ChamadoService();
+-  bool isLoading = false;
+-  List<ChamadoModel> chamados = [];
+-
+-  Future<void> carregarChamados() async {
+-    try {
+-      isLoading = true;
+-      notifyListeners();
+-      // chamados = await _service.listarChamados();
+-    } catch (e) {
+-      debugPrint('Erro: $e');
+-    } finally {
+-      isLoading = false;
+-      notifyListeners();
+-    }
+-  }
+-}
+diff --git a/lib/presentation/controllers/dashboard_controller.dart b/lib/presentation/controllers/dashboard_controller.dart
+deleted file mode 100644
+index a6d3bb6..0000000
+--- a/lib/presentation/controllers/dashboard_controller.dart
++++ /dev/null
+@@ -1,26 +0,0 @@
+-import 'package:flutter/material.dart';
+-import '../../data/models/chamados/chamado_model.dart';
+-import '/data/services/chamado_service.dart';
+-
+-class DashboardController extends ChangeNotifier {
+-  final _service = ChamadoService();
+-
+-  List<ChamadoModel> chamados = [];
+-  bool isLoading = true;
+-
+-  Future<void> carregarChamados() async {
+-    isLoading = true;
+-    notifyListeners();
+-
+-    // chamados = await _service.fetchChamados();
+-
+-    isLoading = false;
+-    notifyListeners();
+-  }
+-
+-  // Estatísticas (simples por enquanto)
+-  // int get totalChamados => chamados.length;
+-  // int get abertos => chamados.where((c) => c.status == 'Aberto').length;
+-  // int get andamento => chamados.where((c) => c.status == 'Em andamento').length;
+-  // int get resolvidos => chamados.where((c) => c.status == 'Resolvido').length;
+-}
+diff --git a/lib/presentation/controllers/esqueceu_senha_controller.dart b/lib/presentation/controllers/esqueceu_senha_controller.dart
+deleted file mode 100644
+index 22ed55c..0000000
+--- a/lib/presentation/controllers/esqueceu_senha_controller.dart
++++ /dev/null
+@@ -1,104 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'dart:async';
+-
+-class EsqueceuSenhaController {
+-  final TextEditingController emailController = TextEditingController();
+-  bool isLoading = false;
+-  VoidCallback? onUpdate;
+-
+-  final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+-
+-  Future<void> enviarLink(BuildContext context) async {
+-    final email = emailController.text.trim();
+-
+-    // Campo vazio
+-    if (email.isEmpty) {
+-      _showSnackBar(context, "Por favor, insira seu email");
+-      return;
+-    }
+-
+-    // Email inválido
+-    if (!emailRegex.hasMatch(email)) {
+-      _showSnackBar(context, "Por favor, insira um email válido");
+-      return;
+-    }
+-
+-    isLoading = true;
+-    onUpdate?.call();
+-
+-    try {
+-      await Future.delayed(const Duration(seconds: 2));
+-
+-      // Email não encontrado
+-      if (email.contains("naoencontrado")) {
+-        _showSnackBar(context, "Email não encontrado");
+-        return;
+-      }
+-
+-      // Sucesso
+-      _showCustomDialog(context, "Link enviado com sucesso!", success: true);
+-    } catch (e) {
+-      _showSnackBar(context, "Erro de conexão: $e");
+-    } finally {
+-      isLoading = false;
+-      onUpdate?.call();
+-    }
+-  }
+-
+-  // SnackBar para erros
+-  void _showSnackBar(BuildContext context, String message) {
+-    ScaffoldMessenger.of(context).showSnackBar(
+-      SnackBar(
+-        content: Text(message),
+-        backgroundColor: Colors.orange.shade700,
+-        duration: const Duration(seconds: 2),
+-      ),
+-    );
+-  }
+-
+-  void _showCustomDialog(BuildContext context, String message,
+-      {bool success = true}) {
+-    showDialog(
+-      context: context,
+-      builder: (context) => Dialog(
+-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+-        backgroundColor: Colors.white,
+-        child: Padding(
+-          padding: const EdgeInsets.all(24),
+-          child: Column(
+-            mainAxisSize: MainAxisSize.min,
+-            children: [
+-              Icon(
+-                success ? Icons.check_circle_outline : Icons.error_outline,
+-                size: 60,
+-                color: success ? Colors.green : Colors.red,
+-              ),
+-              const SizedBox(height: 16),
+-              Text(
+-                message,
+-                textAlign: TextAlign.center,
+-                style:
+-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+-              ),
+-              const SizedBox(height: 24),
+-              ElevatedButton(
+-                style: ElevatedButton.styleFrom(
+-                  backgroundColor: success ? Colors.green : Colors.red,
+-                  shape: RoundedRectangleBorder(
+-                      borderRadius: BorderRadius.circular(10)),
+-                  padding:
+-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+-                ),
+-                onPressed: () => Navigator.pop(context),
+-                child: const Text(
+-                  "OK",
+-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+-                ),
+-              )
+-            ],
+-          ),
+-        ),
+-      ),
+-    );
+-  }
+-}
+diff --git a/lib/presentation/controllers/login_controller.dart b/lib/presentation/controllers/login_controller.dart
+deleted file mode 100644
+index 5055660..0000000
+--- a/lib/presentation/controllers/login_controller.dart
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import 'package:flutter/material.dart';
+-
+-class LoginController {
+-  final TextEditingController emailController = TextEditingController();
+-  final TextEditingController passwordController = TextEditingController();
+-
+-  void login() {
+-    final email = emailController.text;
+-    final password = passwordController.text;
+-
+-    if (email.isEmpty || password.isEmpty) {
+-      print("Preencha todos os campos!");
+-      return;
+-    }
+-
+-    // Aqui você chamaria sua API de login
+-    print("Login com: $email / $password");
+-  }
+-}
+diff --git a/lib/presentation/pages/chamados/criar_chamados_page.dart b/lib/presentation/pages/chamados/criar_chamados_page.dart
+index 37d10c1..430a1d6 100644
+--- a/lib/presentation/pages/chamados/criar_chamados_page.dart
++++ b/lib/presentation/pages/chamados/criar_chamados_page.dart
+@@ -1,4 +1,6 @@
+ import 'package:flutter/material.dart';
++import 'package:front_end_flutter_cortex_ia/data/models/chamados/ChamadoModel.dart';
++import 'package:front_end_flutter_cortex_ia/presentation/controllers/ChamadoController.dart';
+ import '../../widgets/buttons/primary_button.dart';
+ import '../../widgets/cards/cards.dart';
+ import '../../widgets/inputs/campo_formulario.dart';
+@@ -13,6 +15,8 @@ class CriarChamadosPage extends StatefulWidget {
+ }
+ 
+ class _CriarChamadosPageState extends State<CriarChamadosPage> {
++  final ChamadosController controller = ChamadosController(); // ADICIONADO
++
+   final TextEditingController tituloController = TextEditingController();
+   final TextEditingController descricaoController = TextEditingController();
+   final TextEditingController localController = TextEditingController();
+@@ -48,7 +52,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
+           children: [
+             const CabecalhoSecao(title: 'Informações do Chamado'),
+             const SizedBox(height: 20),
+-
+             AppCard(
+               child: Column(
+                 children: [
+@@ -58,7 +61,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
+                     hint: 'Ex: Computador não liga',
+                   ),
+                   const SizedBox(height: 16),
+-
+                   CampoSelecao(
+                     label: 'Prioridade',
+                     value: prioridadeSelecionada,
+@@ -66,7 +68,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
+                     onChanged: (v) => setState(() => prioridadeSelecionada = v),
+                   ),
+                   const SizedBox(height: 16),
+-
+                   CampoSelecao(
+                     label: 'Impacto na Empresa',
+                     value: impactoSelecionado,
+@@ -74,7 +75,6 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
+                     onChanged: (v) => setState(() => impactoSelecionado = v),
+                   ),
+                   const SizedBox(height: 16),
+-
+                   CampoSelecao(
+                     label: 'Categoria',
+                     value: categoriaSelecionada,
+@@ -82,14 +82,12 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
+                     onChanged: (v) => setState(() => categoriaSelecionada = v),
+                   ),
+                   const SizedBox(height: 16),
+-
+                   CampoFormulario(
+                     controller: localController,
+                     label: 'Local / Setor',
+                     hint: 'Ex: Financeiro - Sala 3',
+                   ),
+                   const SizedBox(height: 16),
+-
+                   CampoFormulario(
+                     controller: descricaoController,
+                     label: 'Descrição Detalhada',
+@@ -99,16 +97,44 @@ class _CriarChamadosPageState extends State<CriarChamadosPage> {
+                 ],
+               ),
+             ),
+-
+             const SizedBox(height: 28),
+             PrimaryButton(
+               text: 'Abrir Chamado',
+-              onPressed: () {},
+               type: ButtonType.blue,
+-            )
++              onPressed: () async {
++                final model = ChamadoModel(
++                  titulo: tituloController.text,
++                  descricao: descricaoController.text,
++                  local: localController.text,
++                  prioridade: prioridadeSelecionada ?? "",
++                  impacto: impactoSelecionado ?? "",
++                  categoria: categoriaSelecionada ?? "",
++                );
++
++                final resposta = await controller.criarChamado(model);
++
++                if (resposta != null) {
++                  ScaffoldMessenger.of(context).showSnackBar(
++                    SnackBar(
++                      content: Text("Chamado criado! ID: ${resposta.id}"),
++                      backgroundColor: Colors.green,
++                    ),
++                  );
++
++                  Navigator.pop(context, 1); // VOLTA PARA ABA CHAMADOS
++                } else {
++                  ScaffoldMessenger.of(context).showSnackBar(
++                    const SnackBar(
++                      content: Text("Erro ao criar chamado."),
++                      backgroundColor: Colors.red,
++                    ),
++                  );
++                }
++              },
++            ),
+           ],
+         ),
+       ),
+     );
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/lib/presentation/pages/chamados_page.dart b/lib/presentation/pages/chamados_page.dart
+index f26c843..93db813 100644
+--- a/lib/presentation/pages/chamados_page.dart
++++ b/lib/presentation/pages/chamados_page.dart
+@@ -1,14 +1,65 @@
+ import 'package:flutter/material.dart';
++import 'package:front_end_flutter_cortex_ia/presentation/controllers/ChamadoController.dart';
++import 'package:provider/provider.dart';
++import '../controllers/ChamadoController.dart';
++import '../widgets/cards/cards.dart';
++import '../widgets/cabecalho_secao.dart';
+ 
+-class ChamadosPage extends StatelessWidget {
++class ChamadosPage extends StatefulWidget {
+   const ChamadosPage({super.key});
+ 
++  @override
++  State<ChamadosPage> createState() => _ChamadosPageState();
++}
++
++class _ChamadosPageState extends State<ChamadosPage> {
++  @override
++  void initState() {
++    super.initState();
++    Future.microtask(() =>
++        Provider.of<ChamadosController>(context, listen: false)
++            .carregarChamados());
++  }
++
+   @override
+   Widget build(BuildContext context) {
+-    return const Center(
+-      child: Text(
+-        'Página de Chamados',
+-        style: TextStyle(fontSize: 18),
++    final controller = Provider.of<ChamadosController>(context);
++
++    return Scaffold(
++      backgroundColor: const Color(0xFFF5F6FA),
++      body: SingleChildScrollView(
++        padding: const EdgeInsets.all(16),
++        child: Column(
++          crossAxisAlignment: CrossAxisAlignment.start,
++          children: [
++            const CabecalhoSecao(title: "Meus Chamados"),
++            const SizedBox(height: 20),
++            controller.isLoading
++                ? const Center(child: CircularProgressIndicator())
++                : controller.chamados.isEmpty
++                    ? const Center(
++                        child: Text(
++                          "Nenhum chamado criado ainda.",
++                          style: TextStyle(
++                            fontSize: 16,
++                            color: Colors.black54,
++                          ),
++                        ),
++                      )
++                    : ListView.builder(
++                        shrinkWrap: true,
++                        physics: const NeverScrollableScrollPhysics(),
++                        itemCount: controller.chamados.length,
++                        itemBuilder: (context, index) {
++                          final chamado = controller.chamados[index];
++                          return Padding(
++                            padding: const EdgeInsets.only(bottom: 12),
++                            child: ChamadoCard(chamado: chamado),
++                          );
++                        },
++                      ),
++          ],
++        ),
+       ),
+     );
+   }
+diff --git a/lib/presentation/pages/dashboard_page.dart b/lib/presentation/pages/dashboard_page.dart
+index 213db3e..0a0fb77 100644
+--- a/lib/presentation/pages/dashboard_page.dart
++++ b/lib/presentation/pages/dashboard_page.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/material.dart';
+-import '../controllers/dashboard_controller.dart';
++import '../controllers/DashboardController.dart';
+ import '../widgets/chamado_card.dart';
+ 
+ class DashboardPage extends StatefulWidget {
+diff --git a/lib/presentation/pages/esqueceu_senha.dart b/lib/presentation/pages/esqueceu_senha.dart
+index 51a4d43..8ba1004 100644
+--- a/lib/presentation/pages/esqueceu_senha.dart
++++ b/lib/presentation/pages/esqueceu_senha.dart
+@@ -1,5 +1,5 @@
+ import 'package:flutter/material.dart';
+-import '../controllers/esqueceu_senha_controller.dart';
++import '../controllers/EsqueceuSenhaController.dart';
+ import '../widgets/inputs/campo_formulario.dart';
+ import '../widgets/buttons/primary_button.dart';
+ 
+diff --git a/lib/presentation/pages/login.dart b/lib/presentation/pages/login.dart
+index c0b0c34..34da762 100644
+--- a/lib/presentation/pages/login.dart
++++ b/lib/presentation/pages/login.dart
+@@ -1,6 +1,6 @@
+ import 'package:flutter/material.dart';
+ import '../widgets/inputs/campo_formulario.dart';
+-import '../controllers/login_controller.dart';
++import '../controllers/LoginController.dart';
+ import '../widgets/buttons/primary_button.dart';
+ import 'esqueceu_senha.dart';
+ 
+diff --git a/lib/presentation/widgets/cards/cards.dart b/lib/presentation/widgets/cards/cards.dart
+index cb86b12..f309d6a 100644
+--- a/lib/presentation/widgets/cards/cards.dart
++++ b/lib/presentation/widgets/cards/cards.dart
+@@ -1,4 +1,5 @@
+ import 'package:flutter/material.dart';
++import 'package:front_end_flutter_cortex_ia/data/models/chamados/ChamadoModel.dart';
+ 
+ class AppCard extends StatelessWidget {
+   final Widget child;
+@@ -85,4 +86,90 @@ class StatusCard extends StatelessWidget {
+       ),
+     );
+   }
+-}
+\ No newline at end of file
++}
++
++class ChamadoCard extends StatelessWidget {
++  final ChamadoModel chamado;
++  final VoidCallback? onTap;
++
++  const ChamadoCard({
++    super.key,
++    required this.chamado,
++    this.onTap,
++  });
++
++  Color _statusColor(String? status) {
++    switch (status?.toLowerCase()) {
++      case "aberto":
++        return Colors.red;
++      case "em_andamento":
++      case "em andamento":
++        return Colors.orange;
++      case "finalizado":
++      case "resolvido":
++        return Colors.green;
++      default:
++        return Colors.grey;
++    }
++  }
++
++  @override
++  Widget build(BuildContext context) {
++    final Color color = _statusColor(chamado.status);
++
++    return AppCard(
++      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
++      borderRadius: 14,
++      child: InkWell(
++        onTap: onTap,
++        borderRadius: BorderRadius.circular(14),
++        child: Row(
++          children: [
++            CircleAvatar(
++              radius: 22,
++              backgroundColor: color.withOpacity(0.15),
++              child: Icon(Icons.support_agent, color: color),
++            ),
++
++            const SizedBox(width: 14),
++
++            Expanded(
++              child: Column(
++                crossAxisAlignment: CrossAxisAlignment.start,
++                children: [
++                  Text(
++                    chamado.titulo,
++                    style: const TextStyle(
++                      fontSize: 16,
++                      fontWeight: FontWeight.w700,
++                      color: Color(0xFF1E1E1E),
++                    ),
++                  ),
++                  const SizedBox(height: 4),
++                  Text(
++                    "Prioridade: ${chamado.prioridade}",
++                    style: const TextStyle(
++                      fontSize: 13,
++                      color: Color(0xFF5A5A5A),
++                    ),
++                  ),
++                  const SizedBox(height: 2),
++                  Text(
++                    "Status: ${chamado.status}",
++                    style: TextStyle(
++                      fontSize: 13,
++                      fontWeight: FontWeight.w600,
++                      color: color,
++                    ),
++                  ),
++                ],
++              ),
++            ),
++
++            const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
++          ],
++        ),
++      ),
++    );
++  }
++}
+diff --git a/pubspec.lock b/pubspec.lock
+index b9fd799..be67889 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -75,6 +75,22 @@ packages:
+     description: flutter
+     source: sdk
+     version: "0.0.0"
++  http:
++    dependency: "direct main"
++    description:
++      name: http
++      sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.6.0"
++  http_parser:
++    dependency: transitive
++    description:
++      name: http_parser
++      sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
++      url: "https://pub.dev"
++    source: hosted
++    version: "4.0.2"
+   leak_tracker:
+     dependency: transitive
+     description:
+@@ -131,6 +147,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.15.0"
++  nested:
++    dependency: transitive
++    description:
++      name: nested
++      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.0.0"
+   path:
+     dependency: transitive
+     description:
+@@ -139,6 +163,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.9.0"
++  provider:
++    dependency: "direct main"
++    description:
++      name: provider
++      sha256: "4e82183fa20e5ca25703ead7e05de9e4cceed1fbd1eadc1ac3cb6f565a09f272"
++      url: "https://pub.dev"
++    source: hosted
++    version: "6.1.5+1"
+   sky_engine:
+     dependency: transitive
+     description: flutter
+@@ -192,6 +224,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "0.7.2"
++  typed_data:
++    dependency: transitive
++    description:
++      name: typed_data
++      sha256: f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.4.0"
+   vector_math:
+     dependency: transitive
+     description:
+@@ -208,6 +248,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "14.2.5"
++  web:
++    dependency: transitive
++    description:
++      name: web
++      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.1.1"
+ sdks:
+   dart: ">=3.5.3 <4.0.0"
+   flutter: ">=3.18.0-18.0.pre.54"
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 4816a2a..4094ace 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -31,9 +31,9 @@ dependencies:
+   flutter:
+     sdk: flutter
+ 
+-  # The following adds the Cupertino Icons font to your application.
+-  # Use with the CupertinoIcons class for iOS style icons.
++  http: ^1.2.0
+   cupertino_icons: ^1.0.8
++  provider: ^6.1.2
+ 
+ dev_dependencies:
+   flutter_test:
